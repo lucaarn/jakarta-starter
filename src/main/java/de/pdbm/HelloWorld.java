@@ -9,11 +9,11 @@ import jakarta.ws.rs.core.Response;
 import java.util.logging.Logger;
 
 @Path("helloworld")
+@Produces(MediaType.APPLICATION_JSON)
 public class HelloWorld {
     private static final Logger LOGGER = Logger.getLogger(HelloWorld.class.getCanonicalName());
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getHelloWorld() {
         return Response.ok(toJson("hello world"), MediaType.APPLICATION_JSON).build();
     }
@@ -21,14 +21,35 @@ public class HelloWorld {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") int id) {
-        LOGGER.info("Path param: " + id);
+        LOGGER.info("DELETE: " + id);
         return Response.noContent().build();
     }
 
     @PUT
     public Response put(JsonObject jsonObject) {
-        LOGGER.info(jsonObject.toString());
-        return Response.ok().build();
+        JsonObject result = Json.createObjectBuilder()
+                .add("message", "Hello World PUT")
+                .add("input", jsonObject)
+                .build();
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    public Response post(JsonObject jsonObject) {
+        JsonObject result = Json.createObjectBuilder()
+                .add("message", "Hello World POST")
+                .add("input", jsonObject)
+                .build();
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
+    }
+
+    @PATCH
+    public Response patch(JsonObject jsonObject) {
+        JsonObject result = Json.createObjectBuilder()
+                .add("message", "Hello World PATCH")
+                .add("input", jsonObject)
+                .build();
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
     }
 
     private JsonObject toJson(String message) {
