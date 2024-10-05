@@ -15,7 +15,7 @@ public class HelloWorld {
 
     @GET
     public Response getHelloWorld() {
-        return Response.ok(toJson("hello world"), MediaType.APPLICATION_JSON).build();
+        return Response.ok(toJson("Hello World"), MediaType.APPLICATION_JSON).build();
     }
 
     @DELETE
