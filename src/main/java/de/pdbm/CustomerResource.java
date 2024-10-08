@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.logging.Logger;
 
