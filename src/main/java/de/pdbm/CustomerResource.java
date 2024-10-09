@@ -18,6 +18,11 @@ public class CustomerResource {
     UriInfo uriInfo;
 
     @GET
+    public Response getAllCustomers() {
+        return Response.ok(customerService.getAllCustomers()).build();
+    }
+
+    @GET
     @Path("{id}")
     public Response getCustomer(@PathParam("id") String uuid) {
         Customer customer = customerService.getCustomer(uuid);
@@ -33,6 +38,28 @@ public class CustomerResource {
         UUID uuid = customerService.saveCustomer(customer);
         Link link = Link.fromUri(uriInfo.getPath() + "/" + uuid).build();
         return Response.created(link.getUri()).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    public Response putCustomer(@PathParam("id") String uuid, Customer customer) {
+        boolean updated = customerService.putCustomer(uuid, customer);
+        if (!updated) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
+
+    @PATCH
+    @Path("{id}")
+    public Response patchCustomer(@PathParam("id") String uuid, Customer customer) {
+        boolean updated = customerService.patchCustomer(uuid, customer);
+        if (!updated) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.noContent().build();
+        }
     }
 
     @DELETE
