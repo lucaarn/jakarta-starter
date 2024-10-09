@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 @Path("/customers")
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
-
     @Inject
     CustomerService customerService;
 
@@ -34,6 +33,17 @@ public class CustomerResource {
         UUID uuid = customerService.saveCustomer(customer);
         Link link = Link.fromUri(uriInfo.getPath() + "/" + uuid).build();
         return Response.created(link.getUri()).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteCustomer(@PathParam("id") String uuid) {
+        boolean deleted = customerService.deleteCustomer(uuid);
+        if (!deleted) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } else {
+            return Response.noContent().build();
+        }
     }
 
     @PostConstruct

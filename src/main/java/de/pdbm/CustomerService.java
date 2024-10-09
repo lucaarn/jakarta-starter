@@ -18,4 +18,12 @@ public class CustomerService {
         CUSTOMERS.put(uuid.toString(), customer);
         return uuid;
     }
+
+    public boolean deleteCustomer(String uuid) {
+        if (CUSTOMERS.containsKey(uuid)) {
+            CUSTOMERS.remove(uuid);
+            return true;
+        }
+        return false;
+    }
 }
