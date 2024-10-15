@@ -1,6 +1,9 @@
 package de.pdbm;
 
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -8,19 +11,20 @@ import java.util.UUID;
 @RequestScoped
 public class CustomerService {
     private static final HashMap<String, Customer> CUSTOMERS = new HashMap<String, Customer>();
+    @PersistenceContext
+    EntityManager em;
 
     public HashMap<String, Customer> getAllCustomers() {
         return CUSTOMERS;
     }
 
-    public Customer getCustomer(String uuid) {
-        return CUSTOMERS.get(uuid);
+    public Customer getCustomer(Integer id) {
+        return em.find(Customer.class, id);
     }
 
-    public UUID saveCustomer(Customer customer) {
-        UUID uuid = UUID.randomUUID();
-        CUSTOMERS.put(uuid.toString(), customer);
-        return uuid;
+    @Transactional
+    public void saveCustomer(Customer customer) {
+        em.persist(customer);
     }
 
     public boolean putCustomer(String uuid, Customer customer) {

@@ -1,9 +1,20 @@
 package de.pdbm;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
+@Entity
 public class Customer {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
     private LocalDate dob;
 
@@ -22,6 +33,10 @@ public class Customer {
     }
 
     //getter and setter
+    public Integer getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }

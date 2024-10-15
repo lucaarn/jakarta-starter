@@ -24,8 +24,8 @@ public class CustomerResource {
 
     @GET
     @Path("{id}")
-    public Response getCustomer(@PathParam("id") String uuid) {
-        Customer customer = customerService.getCustomer(uuid);
+    public Response getCustomer(@PathParam("id") Integer id) {
+        Customer customer = customerService.getCustomer(id);
         if (customer == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
@@ -35,8 +35,8 @@ public class CustomerResource {
 
     @POST
     public Response createCustomer(Customer customer) {
-        UUID uuid = customerService.saveCustomer(customer);
-        Link link = Link.fromUri(uriInfo.getPath() + "/" + uuid).build();
+        customerService.saveCustomer(customer);
+        Link link = Link.fromUri(uriInfo.getPath() + "/" + customer.getId()).build();
         return Response.created(link.getUri()).build();
     }
 
