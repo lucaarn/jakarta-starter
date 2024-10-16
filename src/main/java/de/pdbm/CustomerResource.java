@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @Path("/customers")
@@ -42,8 +41,8 @@ public class CustomerResource {
 
     @PUT
     @Path("{id}")
-    public Response putCustomer(@PathParam("id") String uuid, Customer customer) {
-        boolean updated = customerService.putCustomer(uuid, customer);
+    public Response putCustomer(@PathParam("id") Integer id, Customer customer) {
+        boolean updated = customerService.putCustomer(id, customer);
         if (!updated) {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
@@ -53,8 +52,8 @@ public class CustomerResource {
 
     @PATCH
     @Path("{id}")
-    public Response patchCustomer(@PathParam("id") String uuid, Customer customer) {
-        boolean updated = customerService.patchCustomer(uuid, customer);
+    public Response patchCustomer(@PathParam("id") Integer id, Customer customer) {
+        boolean updated = customerService.patchCustomer(id, customer);
         if (!updated) {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {
@@ -64,8 +63,8 @@ public class CustomerResource {
 
     @DELETE
     @Path("{id}")
-    public Response deleteCustomer(@PathParam("id") String uuid) {
-        boolean deleted = customerService.deleteCustomer(uuid);
+    public Response deleteCustomer(@PathParam("id") Integer id) {
+        boolean deleted = customerService.deleteCustomer(id);
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         } else {

@@ -5,17 +5,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.List;
 
 @RequestScoped
 public class CustomerService {
-    private static final HashMap<String, Customer> CUSTOMERS = new HashMap<String, Customer>();
     @PersistenceContext
     EntityManager em;
 
-    public HashMap<String, Customer> getAllCustomers() {
-        return CUSTOMERS;
+    public List<Customer> getAllCustomers() {
+        return em.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
     }
 
     public Customer getCustomer(Integer id) {
@@ -27,35 +25,47 @@ public class CustomerService {
         em.persist(customer);
     }
 
-    public boolean putCustomer(String uuid, Customer customer) {
-        if (!CUSTOMERS.containsKey(uuid)) {
+    @Transactional
+    public boolean putCustomer(Integer id, Customer newCustomer) {
+        Customer customer = em.find(Customer.class, id);
+        if (customer == null) {
             return false;
         }
-        CUSTOMERS.put(uuid, customer);
+
+        customer.setFirstName(newCustomer.getFirstName());
+        customer.setLastName(newCustomer.getLastName());
+        customer.setDob(newCustomer.getDob());
+        em.merge(customer);
         return true;
     }
 
-    public boolean patchCustomer(String uuid, Customer customer) {
-        if (!CUSTOMERS.containsKey(uuid)) {
+    @Transactional
+    public boolean patchCustomer(Integer id, Customer newCustomer) {
+        Customer customer = em.find(Customer.class, id);
+        if (customer == null) {
             return false;
         }
-        if (customer.getFirstName() != null) {
-            CUSTOMERS.get(uuid).setFirstName(customer.getFirstName());
+
+        if (newCustomer.getFirstName() != null) {
+            customer.setFirstName(newCustomer.getFirstName());
         }
-        if (customer.getLastName() != null) {
-            CUSTOMERS.get(uuid).setLastName(customer.getLastName());
+        if (newCustomer.getLastName() != null) {
+            customer.setLastName(newCustomer.getLastName());
         }
-        if (customer.getDob() != null) {
-            CUSTOMERS.get(uuid).setDob(customer.getDob());
+        if (newCustomer.getDob() != null) {
+            customer.setDob(newCustomer.getDob());
         }
         return true;
     }
 
-    public boolean deleteCustomer(String uuid) {
-        if (CUSTOMERS.containsKey(uuid)) {
-            CUSTOMERS.remove(uuid);
-            return true;
+    @Transactional
+    public boolean deleteCustomer(Integer id) {
+        Customer customer = em.find(Customer.class, id);
+        if (customer == null) {
+            return false;
         }
-        return false;
+
+        em.remove(customer);
+        return true;
     }
 }
