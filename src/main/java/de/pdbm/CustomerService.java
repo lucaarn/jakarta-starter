@@ -68,4 +68,9 @@ public class CustomerService {
         em.remove(customer);
         return true;
     }
+
+    @Transactional
+    public void deleteAllCustomers() {
+        em.createQuery("DELETE FROM Customer ").executeUpdate();
+    }
 }

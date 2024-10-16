@@ -72,6 +72,12 @@ public class CustomerResource {
         }
     }
 
+    @DELETE
+    public Response deleteAllCustomers() {
+        customerService.deleteAllCustomers();
+        return Response.noContent().build();
+    }
+
     @PostConstruct
     public void init() {
         Logger.getLogger(CustomerService.class.getCanonicalName()).info("created customer");
